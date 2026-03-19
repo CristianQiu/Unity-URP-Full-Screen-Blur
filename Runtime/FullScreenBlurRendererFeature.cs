@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 /// The full screen blur renderer feature.
 /// </summary>
 [Tooltip("Adds support to do a full screen blur.")]
-[DisallowMultipleRendererFeature("Fullscreen Blur")]
+[DisallowMultipleRendererFeature("Full Screen Blur")]
 public sealed class FullScreenBlurRendererFeature : ScriptableRendererFeature
 {
 	#region Private Attributes
