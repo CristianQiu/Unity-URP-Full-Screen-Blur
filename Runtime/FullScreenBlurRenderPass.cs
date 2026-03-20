@@ -18,7 +18,8 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 		public TextureHandle source;
 
 		public Material material;
-		public int materialPassIndex;
+		public int downsamplePass;
+		public int upsamplePass;
 
 		public TextureHandle[] pyramid;
 		public float intensity;
@@ -76,6 +77,8 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 
 			passData.source = resourceData.activeColorTexture;
 			passData.material = material;
+			passData.upsamplePass = 0;
+			passData.upsamplePass = 1;
 			passData.pyramid = pyramid;
 			passData.intensity = volume.intensity.value;
 			passData.passes = volume.passes.value;
@@ -142,16 +145,21 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 		UpdateMaterialParameters(material, passData.intensity);
 
 		CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(context.cmd);
-		Blitter.BlitTexture(cmd, passData.source, Vector2.one, material, 0);
 
 		int passes = passData.passes;
+		int downsamplePass = passData.downsamplePass;
+		int upsamplePass = passData.upsamplePass;
+		TextureHandle[] pyramid = passData.pyramid;
+
+		Blitter.BlitTexture(cmd, passData.source, Vector2.one, material, downsamplePass);
+
 		for (int i = 0; i < (passes - 1); ++i)
-			Blitter.BlitCameraTexture(cmd, passData.pyramid[i], passData.pyramid[i + 1], material, 0);
+			Blitter.BlitCameraTexture(cmd, pyramid[i], pyramid[i + 1], material, downsamplePass);
 
 		for (int i = (passes - 1); i > 0; --i)
-			Blitter.BlitCameraTexture(cmd, passData.pyramid[i], passData.pyramid[i - 1], material, 1);
+			Blitter.BlitCameraTexture(cmd, pyramid[i], pyramid[i - 1], material, upsamplePass);
 
-		Blitter.BlitCameraTexture(cmd, passData.pyramid[0], passData.source, material, 1);
+		Blitter.BlitCameraTexture(cmd, passData.pyramid[0], passData.source, material, upsamplePass);
 	}
 
 	#endregion
