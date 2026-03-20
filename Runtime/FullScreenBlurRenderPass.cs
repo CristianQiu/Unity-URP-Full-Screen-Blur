@@ -124,12 +124,9 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 	/// <param name="intensity"></param>
 	private static void UpdateMaterialParameters(Material material, float intensity)
 	{
-		float blurIntensity = Mathf.Lerp(0.0f, BlurIntensity, Mathf.Sqrt(intensity));
-		float factor = Screen.height / BlurSizeScalingReferenceHeight;
-
 		// An increase of x4 pixels equals to a multiplier of 2.5 to blur intensity.
-		factor = Mathf.InverseLerp(0.0f, 4.0f, factor);
-		factor = Mathf.Lerp(0.0f, 2.5f, factor);
+		float factor = ((Screen.height / BlurSizeScalingReferenceHeight) / 4.0f) * 2.5f;
+		float blurIntensity = Mathf.Lerp(0.0f, BlurIntensity, Mathf.Sqrt(intensity));
 
 		material.SetFloat(IntensityId, blurIntensity * factor);
 	}
