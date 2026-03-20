@@ -149,12 +149,12 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 
 		int passes = passData.passes;
 		for (int i = 0; i < (passes - 1); ++i)
-			Blitter.BlitCameraTexture(cmd, passData.pyramid[i], passData.pyramid[i + 1], RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, material, 0);
+			Blitter.BlitCameraTexture(cmd, passData.pyramid[i], passData.pyramid[i + 1], material, 0);
 
 		for (int i = (passes - 1); i > 0; --i)
-			Blitter.BlitCameraTexture(cmd, passData.pyramid[i], passData.pyramid[i - 1], RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, material, 1);
+			Blitter.BlitCameraTexture(cmd, passData.pyramid[i], passData.pyramid[i - 1], material, 1);
 
-		Blitter.BlitCameraTexture(cmd, passData.pyramid[0], passData.source, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, material, 1);
+		Blitter.BlitCameraTexture(cmd, passData.pyramid[0], passData.source, material, 1);
 	}
 
 	#endregion
