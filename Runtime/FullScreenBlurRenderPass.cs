@@ -68,12 +68,11 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 	/// <param name="frameData"></param>
 	public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
 	{
+		FullScreenBlurVolumeComponent volume = VolumeManager.instance.stack.GetComponent<FullScreenBlurVolumeComponent>();
 		UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
 
 		using (IUnsafeRenderGraphBuilder builder = renderGraph.AddUnsafePass("Full Screen Blur", out PassData passData, profilingSampler))
 		{
-			FullScreenBlurVolumeComponent volume = VolumeManager.instance.stack.GetComponent<FullScreenBlurVolumeComponent>();
-
 			CreateRenderGraphTextures(renderGraph, resourceData, builder, volume.passes.value);
 
 			passData.source = resourceData.activeColorTexture;
