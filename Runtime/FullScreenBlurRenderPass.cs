@@ -77,7 +77,7 @@ public sealed class FullScreenBlurRenderPass : ScriptableRenderPass
 
 			passData.source = resourceData.activeColorTexture;
 			passData.material = material;
-			passData.upsamplePass = 0;
+			passData.downsamplePass = 0;
 			passData.upsamplePass = 1;
 			passData.pyramid = pyramid;
 			passData.intensity = volume.intensity.value;
